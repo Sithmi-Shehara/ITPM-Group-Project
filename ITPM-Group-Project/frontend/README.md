@@ -1,16 +1,16 @@
-Prerequisites,<br/>
-npm installation-----
+Prerequisites,<br/><br/>
+npm installation-----<br/>
 cd frontend
-npm install
+npm install<br/><br/>
 
-package installation----
-npm install react-router-dom
-npm install axios
-npm install recharts
-npm install react-icons
-npm install tailwindcss @tailwindcss/vite
+package installation----<br/>
+npm install react-router-dom<br/>
+npm install axios<br/>
+npm install recharts<br/>
+npm install react-icons<br/>
+npm install tailwindcss @tailwindcss/vite<br/><br/>
 
-finally-----
-for run the frontend
-npm run dev
+finally-----<br/>
+for run the frontend<br/>
+npm run dev<br/>
 
