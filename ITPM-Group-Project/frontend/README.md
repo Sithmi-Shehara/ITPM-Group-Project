@@ -1,4 +1,4 @@
-Prerequisites,
+Prerequisites,<br/>
 npm installation-----
 cd frontend
 npm install
