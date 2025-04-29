@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
-import { FaMoneyBillTrendUp, FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaMoneyBillTrendUp, FaMoneyBillTransfer, FaBoxesPacking, FaBoxesStacked } from "react-icons/fa6";
 import { GrTransaction } from "react-icons/gr";
 import { HiDocumentReport } from "react-icons/hi";
 import { IoMdSettings } from "react-icons/io";
@@ -21,10 +21,38 @@ function SideBar() {
           }
         >
           <MdDashboard className="mr-3" />
-          Dashboard
+          Home
+        </NavLink>
+      </div>
+      
+      <div className="flex flex-row h-15 items-center pl-1">
+        <NavLink
+          to="/stocks"
+          className={({ isActive }) =>
+            `flex flex-row w-[100%] h-[80%] pl-3 items-center text-gray-700 hover:text-orange-800 hover:bg-orange-200 rounded-r-lg ${
+              isActive ? "bg-orange-300 text-white font-bold" : ""
+            }`
+          }
+        >
+          <FaBoxesPacking className="mr-3" />
+          Stocks
         </NavLink>
       </div>
 
+      <div className="flex flex-row h-15 items-center pl-1">
+        <NavLink
+          to="/categories"
+          className={({ isActive }) =>
+            `flex flex-row w-[100%] h-[80%] pl-3 items-center text-gray-700 hover:text-orange-800 hover:bg-orange-200 rounded-r-lg ${
+              isActive ? "bg-orange-300 text-white font-bold" : ""
+            }`
+          }
+        >
+          <FaBoxesStacked className="mr-3" />
+          Stock Categories
+        </NavLink>
+      </div>
+      
       <div className="flex flex-row h-15 items-center pl-1">
         <NavLink
           to="/expensestrack"
@@ -91,7 +119,7 @@ function SideBar() {
           }
         >
           <IoMdSettings className="mr-3" />
-          Setting
+          Settings
         </NavLink>
       </div>
     </div>
