@@ -39,7 +39,7 @@ const IncomeManager = () => {
       const res = await getMonthlyBalance(year, month);
       setBalance(res.data);
     } catch (err) {
-      console.error("Error fetching balance:", err);
+      console.error("Error fetching balance: ", err);
     }
   };
 
