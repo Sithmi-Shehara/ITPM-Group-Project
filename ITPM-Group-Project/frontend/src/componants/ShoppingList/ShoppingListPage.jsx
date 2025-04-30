@@ -16,7 +16,7 @@ const ShoppingListPage = () => {
       .catch((err) => console.error("Fetch error:", err));
   }, []);
 
-  // Generate list based on form
+  // Generate list based on input
   const handleGenerate = (form) => {
     const { numPeople, duration, preference } = form;
     const factor = duration === "week" ? 1 : 4;
