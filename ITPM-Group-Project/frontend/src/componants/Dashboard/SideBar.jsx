@@ -52,6 +52,19 @@ function SideBar() {
           Stock Categories
         </NavLink>
       </div>
+      <div className="flex flex-row h-15 items-center pl-1">
+        <NavLink
+          to="/stock-analysis"
+          className={({ isActive }) =>
+            `flex flex-row w-[100%] h-[80%] pl-3 items-center text-gray-700 hover:text-orange-800 hover:bg-orange-200 rounded-r-lg ${
+              isActive ? "bg-orange-300 text-white font-bold" : ""
+            }`
+          }
+        >
+          <FaBoxesStacked className="mr-3" />
+          Stock Analysis
+        </NavLink>
+      </div>
       
       <div className="flex flex-row h-15 items-center pl-1">
         <NavLink

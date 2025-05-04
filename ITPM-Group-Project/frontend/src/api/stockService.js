@@ -16,13 +16,44 @@ export default class StockService {
         return response;
     }
 
-    static async getStocks(substr) {
-        const response = await axios.get(`${this.BASE_URL}/find/all?substr=${substr}`, {
+    static async getStocksByFilter(filter) {
+        const response = await axios.post(`${this.BASE_URL}/find/filter`, filter, {
             "Content-Type": "application/json"
         });
         return response;
     }
 
+    static async getStocks() {
+        const response = await axios.get(`${this.BASE_URL}/find/all`, {
+            "Content-Type": "application/json"
+        });
+        return response;
+    }
+
+    static async generateReport(availability, config = {}) {
+        const response = await axios.get(`${this.BASE_URL}/generate/report/${availability}`, {
+            ...config,
+            responseType: 'arraybuffer',
+            headers: {
+                'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }
+        });
+        return response;
+    }
+
+    static async getCategoryCounts() {
+        const response = await axios.get(`${this.BASE_URL}/category/counts`, {
+            "Content-Type": "application/json"
+        });
+        return response;
+    }
+
+    static async getCategoryQuantities() {
+        const response = await axios.get(`${this.BASE_URL}/category/quantities`, {
+            "Content-Type": "application/json"
+        });
+        return response;
+    }
 
     static async findStockById(stockId) {
         const response = await axios.get(`${this.BASE_URL}/find/${stockId}`, {

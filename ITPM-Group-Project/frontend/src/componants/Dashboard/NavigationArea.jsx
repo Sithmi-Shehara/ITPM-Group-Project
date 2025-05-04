@@ -9,7 +9,7 @@ import IncomeMainPage from "../ExpensesTrack/IncomeMainPage";
 import StockViewPage from "../Stocks/StockView";
 import CategoryPage from "../Stocks/CategoryPage";
 import AddEditStockPage from "../Stocks/AddEditStockPage";
-
+import StockAnalysis from "../Stocks/StockAnalysis";
 function NavigationArea() {
   return (
     <React.Fragment>
@@ -22,6 +22,7 @@ function NavigationArea() {
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/add-stock" element={<AddEditStockPage />} />
           <Route path="/edit-stock/:stockId" element={<AddEditStockPage/>}/>
+          <Route path="/stock-analysis" element={<StockAnalysis />} />
         </Routes>
       </section>
     </React.Fragment>
