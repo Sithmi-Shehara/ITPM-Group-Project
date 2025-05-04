@@ -89,13 +89,13 @@ const StockAnalysis = () => {
             <h1 className="analysis-title">Stock Analysis</h1>
             <div className="charts-container">
                 <div className="chart-wrapper">
-                    <h2>Number of Items by Category</h2>
+                    <h2>Number of Stocks by Category</h2>
                     <div className="chart">
                         <Pie data={countsData} options={options} />
                     </div>
                 </div>
                 <div className="chart-wrapper">
-                    <h2>Total Quantity by Category</h2>
+                    <h2>Total Stock Quantity by Category</h2>
                     <div className="chart">
                         <Pie data={quantitiesData} options={options} />
                     </div>
