@@ -9,7 +9,7 @@ import {
   getMonthlyBalance,
 } from "../../api/income";
 
-const IncomeManager = () => {
+const IncomeManager = ({ onIncomeAdded }) => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [incomeList, setIncomeList] = useState([]);
@@ -19,6 +19,9 @@ const IncomeManager = () => {
     description: "",
     incomeType: "ONE_TIME",
   });
+
+  const [errors, setErrors] = useState({});
+  const [isPopupOpen, setPopupOpen] = useState(false);
 
   useEffect(() => {
     fetchIncome();
@@ -39,40 +42,66 @@ const IncomeManager = () => {
       const res = await getMonthlyBalance(year, month);
       setBalance(res.data);
     } catch (err) {
-      console.error("Error fetching balance: ", err);
+      console.error("Error fetching balance:", err);
     }
+  };
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!form.amount || form.amount <= 0) {
+      newErrors.amount = "Amount must be a positive number.";
+    }
+
+    if (!form.description.trim()) {
+      newErrors.description = "Description cannot be empty.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleAddIncome = async (e) => {
     e.preventDefault();
-    try {
-      const incomeData = {
-        amount: parseFloat(form.amount),
-        description: form.description,
-        incomeType: form.incomeType,
-        month: `${year}-${String(month).padStart(2, "0")}`,
-      };
-      await addIncome(incomeData);
-      setForm({ amount: "", description: "", incomeType: "ONE_TIME" });
-      fetchIncome();
-      fetchBalance();
-    } catch (err) {
-      console.error("Error adding income:", err);
+    if (validateForm()) {
+      try {
+        const incomeData = {
+          amount: parseFloat(form.amount),
+          description: form.description,
+          incomeType: form.incomeType,
+          month: `${year}-${String(month).padStart(2, "0")}`,
+        };
+        await addIncome(incomeData);
+        onIncomeAdded();
+        setForm({ amount: "", description: "", incomeType: "ONE_TIME" });
+        fetchIncome();
+        fetchBalance();
+        alert("Income added successfully!");
+      } catch (err) {
+        console.error("Error adding income:", err);
+      }
     }
   };
 
   const handleDeleteIncome = async (id) => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this expense?"
+    );
+    if (!confirm) return;
+
     try {
       await deleteIncome(id);
       fetchIncome();
       fetchBalance();
+      onIncomeAdded();
+      alert("Income deleted");
     } catch (err) {
       console.error("Error deleting income:", err);
     }
   };
 
   return (
-    <div className="w-md p-6 rounded-md">
+    <div className="w-md px-5 py-5 rounded-md">
       <div className="flex flex-row justify-between">
         <div
           className={`flex flex-col w-40 p-2 justify-center items-center ${
@@ -112,42 +141,82 @@ const IncomeManager = () => {
           </div>
         </div>
       </div>
+      <div
+        className="flex justify-center items-center mt-2 px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded-md"
+        onClick={() => setPopupOpen(true)}
+      >
+        Add Income
+      </div>
 
-      <form onSubmit={handleAddIncome} className="mb-4 mt-4">
-        <label className="pl-2 text-orange-900">Add your income here</label>
-        <div className="flex gap-2">
-          <input
-            type="number"
-            value={form.amount}
-            onChange={(e) => setForm({ ...form, amount: e.target.value })}
-            placeholder="Amount"
-            className="h-10 bg-orange-200 p-2 w-1/3 rounded-md"
-            required
-          />
-          <input
-            type="text"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            placeholder="Description"
-            className="h-10 bg-orange-200 p-2 w-1/3 rounded-md"
-            required
-          />
-          <select
-            value={form.incomeType}
-            onChange={(e) => setForm({ ...form, incomeType: e.target.value })}
-            className="h-10 bg-orange-200 p-2 w-1/3 rounded-md"
+      {isPopupOpen && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+          <form
+            
+            className="flex flex-col w-100 h-auto p-5 bg-white rounded-md"
           >
-            <option value="ONE_TIME">One-time</option>
-            <option value="MONTHLY">Monthly</option>
-          </select>
+            <label className="font-bold pl-2 text-orange-900 mb-3">
+              Add your income here
+            </label>
+            <div className="flex flex-col w-full">
+              <input
+                type="number"
+                value={form.amount}
+                onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                placeholder="Amount"
+                className="h-10 bg-orange-200 p-2 rounded-md mb-3 focus:outline-0"
+                required
+              />
+
+              <input
+                type="text"
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+                placeholder="Description"
+                className="h-10 bg-orange-200 p-2 rounded-md mb-3 focus:outline-0"
+                required
+              />
+
+              <select
+                value={form.incomeType}
+                onChange={(e) =>
+                  setForm({ ...form, incomeType: e.target.value })
+                }
+                className="h-10 bg-orange-200 p-2 rounded-md mb-3 focus:outline-0"
+              >
+                <option value="ONE_TIME">One-time</option>
+                <option value="MONTHLY">Monthly</option>
+              </select>
+            </div>
+            <div>
+              {errors.amount && (
+                <p className="text-red-600 text-sm">{errors.amount}</p>
+              )}
+              {errors.description && (
+                <p className="text-red-600 text-sm">{errors.description}</p>
+              )}
+            </div>
+
+            <div className="flex flex-row justify-end">
+              <div
+                className="flex justify-center items-center mt-2 px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-md mr-3"
+                onClick={() => setPopupOpen(false)}
+              >
+                cancel
+              </div>
+
+              <div
+                type="submit"
+                onClick={handleAddIncome}
+                className="flex justify-center items-center mt-2 px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded-md"
+              >
+                Add Income
+              </div>
+            </div>
+          </form>
         </div>
-        <button
-          type="submit"
-          className="mt-2 px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded-md"
-        >
-          Add Income
-        </button>
-      </form>
+      )}
 
       <div>
         <h3 className="text-lg font-medium mb-1 mt-2 bg-green-200 p-2 rounded-md">
@@ -167,12 +236,12 @@ const IncomeManager = () => {
               >
                 <span>Rs {income.amount.toFixed(2)}</span>
                 <span>{income.description}</span>
-                <button
+                <div
                   onClick={() => handleDeleteIncome(income.id)}
                   className="text-red-400 text-md hover:text-red-500"
                 >
                   <RiDeleteBin6Fill />
-                </button>
+                </div>
               </li>
             ))
           )}

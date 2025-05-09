@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ShoppingListForm from "./ShoppingListForm";
 import GeneratedList from "./GeneratedList";
 import SavedLists from "./SavedLists";
@@ -14,9 +17,9 @@ const ShoppingListPage = () => {
       .then((res) => res.json())
       .then((data) => setSavedLists(data))
       .catch((err) => console.error("Fetch error:", err));
-  }, []);
+  }, [savedLists]);
 
-  // Generate list based on input
+  // Generate list based on form
   const handleGenerate = (form) => {
     const { numPeople, duration, preference } = form;
     const factor = duration === "week" ? 1 : 4;
@@ -57,10 +60,33 @@ const ShoppingListPage = () => {
       .catch((err) => console.error("Save error:", err));
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/shoppinglists/delete/${id}`
+      );
+      toast.success("Delete completed", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setSavedLists((prevLists) => prevLists.filter((list) => list._id !== id));
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
+
   return (
     <div className="p-4">
       {/* Top Right Button */}
       <div className="flex justify-end mb-4">
+        <ToastContainer />
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -90,7 +116,7 @@ const ShoppingListPage = () => {
       )}
 
       {/* Display Saved Lists */}
-      <SavedLists lists={savedLists} />
+      <SavedLists lists={savedLists} handleDelete={handleDelete} />
     </div>
   );
 };
