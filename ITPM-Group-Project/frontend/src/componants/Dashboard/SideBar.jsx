@@ -68,7 +68,7 @@ function SideBar() {
       
       <div className="flex flex-row h-15 items-center pl-1">
         <NavLink
-          to="/expensestrack"
+          to="/budgets"
           className={({ isActive }) =>
             `flex flex-row w-[100%] h-[80%] pl-3 items-center text-gray-700 hover:text-orange-800 hover:bg-orange-200 rounded-r-lg ${
               isActive ? "bg-orange-300 text-white font-bold" : ""
@@ -76,7 +76,7 @@ function SideBar() {
           }
         >
           <FaMoneyBillTrendUp className="mr-3" />
-          My Income
+          My Money
         </NavLink>
       </div>
 

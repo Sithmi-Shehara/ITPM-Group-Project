@@ -25,3 +25,7 @@ export const getMonthlyBalance = async (year, month) => {
 export const getYearlyIncome = async (year) => {
   return axios.get(`${API_BASE_URL}/monthly-income/yearly/${year}`);
 };
+
+export const getYearlyExpenses = async (year) => {
+  return axios.get(`${API_BASE_URL}/expenses/yearly/${year}`);
+};

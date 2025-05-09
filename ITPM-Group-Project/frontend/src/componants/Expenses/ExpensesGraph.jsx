@@ -7,26 +7,26 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { getYearlyIncome } from "../../api/income";
+import { getYearlyExpenses } from "../../api/income";
 
-const IncomeManager = ({ refresh }) => {
+const ExpensesGraph = ({ refresh }) => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [yearlyIncome, setYearlyIncome] = useState([]);
+  const [yearlyExpenses, setYearlyExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchYearlyIncome();
+    fetchYearlyEpenses();
   }, [year, refresh]);
 
-  const fetchYearlyIncome = async () => {
+  const fetchYearlyEpenses = async () => {
     try {
       setLoading(true);
-      const res = await getYearlyIncome(year);
+      const res = await getYearlyExpenses(year);
       const formattedData = Array.from({ length: 12 }, (_, i) => ({
         month: new Date(0, i).toLocaleString("default", { month: "short" }),
-        income: res.data[i + 1] || 0,
+        Expenses: res.data[i + 1] || 0,
       }));
-      setYearlyIncome(formattedData);
+      setYearlyExpenses(formattedData);
     } catch (err) {
       console.error("Error fetching yearly income:", err);
     }
@@ -56,13 +56,15 @@ const IncomeManager = ({ refresh }) => {
         </div>
       ) : (
         <div className="bg-gray-100 p-4 rounded-md">
-          <h3 className="text-lg font-semibold mb-2">Yearly Income Overview</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Yearly Expenses Overview
+          </h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={yearlyIncome}>
+            <BarChart data={yearlyExpenses}>
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="income" fill="#82ca9d" />
+              <Bar dataKey="Expenses" fill="#82ca9d" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -71,4 +73,4 @@ const IncomeManager = ({ refresh }) => {
   );
 };
 
-export default IncomeManager;
+export default ExpensesGraph;

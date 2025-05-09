@@ -10,19 +10,19 @@ import StockViewPage from "../Stocks/StockView";
 import CategoryPage from "../Stocks/CategoryPage";
 import AddEditStockPage from "../Stocks/AddEditStockPage";
 import StockAnalysis from "../Stocks/StockAnalysis";
+import BudgetTrack from "../../pages/BudgetTrack";
 function NavigationArea() {
   return (
     <React.Fragment>
       <section>
         <Routes>
-          <Route path="/expenses" element={<ExpensesMainPage />} />
           <Route path="/shoppinglist" element={<ShoppingListPage />} />
-          <Route path="/expensestrack" element={<IncomeMainPage />} />
           <Route path="/stocks" element={<StockViewPage />} />
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/add-stock" element={<AddEditStockPage />} />
           <Route path="/edit-stock/:stockId" element={<AddEditStockPage/>}/>
           <Route path="/stock-analysis" element={<StockAnalysis />} />
+          <Route path="/budgets/*" element={<BudgetTrack />} />
         </Routes>
       </section>
     </React.Fragment>
